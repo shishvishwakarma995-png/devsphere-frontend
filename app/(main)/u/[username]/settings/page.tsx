@@ -85,9 +85,6 @@ export default function SettingsPage() {
             </div>
             <div>
               <p className="text-sm font-semibold text-txt1">@{me?.username}</p>
-              <p className="text-xs text-txt2 mt-0.5">
-                Avatar upload coming in Day 8
-              </p>
             </div>
           </div>
         </div>

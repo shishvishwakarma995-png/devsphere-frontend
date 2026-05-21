@@ -1,7 +1,7 @@
 "use client"
 import { useState, use } from "react"
 import useSWR from "swr"
-import { getPost } from "@/lib/api"
+import { getPost, createComment } from "@/lib/api"
 import PostCard from "@/components/PostCard"
 
 interface PageProps {
@@ -24,19 +24,7 @@ export default function PostDetailPage({ params }: PageProps) {
 
     setIsSubmitting(true)
     try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null
-      
-      const res = await fetch(`http://localhost:4000/api/posts/${id}/comments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token && { "Authorization": `Bearer ${token}` }),
-        },
-        body: JSON.stringify({ content: commentText }),
-      })
-
-      if (!res.ok) throw new Error("Comment post failed")
-
+      await createComment(id, commentText)
       setCommentText("")
       mutate() // Instant UI update via SWR refresh
     } catch (err) {
@@ -145,10 +133,10 @@ export default function PostDetailPage({ params }: PageProps) {
                   <div className="flex items-center gap-1.5">
                     {/* User Avatar Circle Fallback */}
                     <div className="w-5 h-5 rounded-full bg-teal/10 border border-teal/20 text-[10px] text-teal flex items-center justify-center font-bold">
-                      {comment.user?.username?.charAt(0).toUpperCase() || 'A'}
+                      {comment.author?.username?.charAt(0).toUpperCase() || 'A'}
                     </div>
                     <span className="font-semibold text-teal hover:underline cursor-pointer">
-                      @{comment.user?.username || 'anonymous'}
+                      @{comment.author?.username || 'anonymous'}
                     </span>
                   </div>
                   <span className="text-txt2/70 text-[11px]">

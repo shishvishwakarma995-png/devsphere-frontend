@@ -7,6 +7,16 @@ export default async function RootPage() {
   const token = cookieStore.get("token")
   if (token) redirect("/home")
 
+  let stats = { posts: 0, communities: 0, users: 0 }
+  try {
+    const apiRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/stats`, { next: { revalidate: 10 } })
+    if (apiRes.ok) {
+      stats = await apiRes.json()
+    }
+  } catch (e) {
+    console.error("Failed to fetch stats on landing page:", e)
+  }
+
   return (
     <div style={{ background: '#060D1A', minHeight: '100vh', overflow: 'hidden' }}>
       <style>{`
@@ -142,12 +152,35 @@ export default async function RootPage() {
         </h1>
 
         <p className="fade-up-3" style={{
-          fontSize:'18px', color:'#5D7A9A', marginBottom:'36px',
-          lineHeight:1.7, maxWidth:'560px', margin:'0 auto 36px'
+          fontSize:'17px', color:'#5D7A9A', marginBottom:'28px',
+          lineHeight:1.7, maxWidth:'560px', margin:'0 auto 28px'
         }}>
           Share code, discuss ideas, vote on solutions. DevSphere is the community
           platform built by developers, for developers.
         </p>
+
+        {/* Real-time stats banner */}
+        <div className="fade-up-3" style={{
+          display:'flex', gap:'32px', justifyContent:'center',
+          marginBottom:'40px', background:'rgba(45,212,191,0.02)',
+          border:'0.5px solid rgba(45,212,191,0.15)', borderRadius:'16px',
+          padding:'16px 24px', maxWidth:'480px', margin:'0 auto 36px'
+        }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize:'20px', fontWeight:800, color:'#2DD4BF' }}>{stats.users || 0}</div>
+            <div style={{ fontSize:'10px', color:'#5D7A9A', textTransform:'uppercase', fontWeight:600, letterSpacing:'0.5px', marginTop:'2px' }}>Developers</div>
+          </div>
+          <div style={{ width:'1px', background:'#1E3050' }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize:'20px', fontWeight:800, color:'#818CF8' }}>{stats.communities || 0}</div>
+            <div style={{ fontSize:'10px', color:'#5D7A9A', textTransform:'uppercase', fontWeight:600, letterSpacing:'0.5px', marginTop:'2px' }}>Communities</div>
+          </div>
+          <div style={{ width:'1px', background:'#1E3050' }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize:'20px', fontWeight:800, color:'#2DD4BF' }}>{stats.posts || 0}</div>
+            <div style={{ fontSize:'10px', color:'#5D7A9A', textTransform:'uppercase', fontWeight:600, letterSpacing:'0.5px', marginTop:'2px' }}>Discussions</div>
+          </div>
+        </div>
 
         {/* CTA Buttons */}
         <div className="fade-up-4" style={{
