@@ -575,7 +575,7 @@ export default function LandingPage() {
         <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
           <Link href="/" className="nav-logo">DevSphere</Link>
           <div className="nav-links">
-            <Link href="/login" className="nav-signin">Sign In</Link>
+            <Link href="/login/" className="nav-signin">Sign In</Link>
             <Link href="/login" className="nav-cta">Get Started →</Link>
           </div>
         </nav>
