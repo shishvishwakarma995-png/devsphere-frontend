@@ -77,7 +77,7 @@ export const getMyCommunities = () => req('/api/communities/my/list')
 export const getUser = (username: string) => req(`/api/users/${username}`)
 export const deletePost = (id: string) => req(`/api/posts/${id}`, { method: 'DELETE' })
 
-// ✅ Fixed — uses BASE instead of hardcoded localhost
+
 export async function createComment(postId: string, content: string) {
   return req(`/api/posts/${postId}/comments`, {
     method: 'POST',
