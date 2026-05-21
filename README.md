@@ -1,5 +1,3 @@
-cat > /mnt/user-data/outputs/README-frontend.md << 'EOF'
-<div align="center">
 
 # 🌐 DevSphere Frontend
 
@@ -11,19 +9,9 @@ cat > /mnt/user-data/outputs/README-frontend.md << 'EOF'
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000?style=for-the-badge&logo=vercel)](https://vercel.com)
 
-A full-featured developer community platform — Reddit meets LinkedIn for developers. Built in 10 days.
+A full-featured developer community platform — Reddit meets LinkedIn for developers. 
 
 </div>
-
----
-
-## 📸 Screenshots
-
-> _Add screenshots after deployment_
-
-| Landing Page | Home Feed | Profile | Post Detail |
-|---|---|---|---|
-| ![Landing](./screenshots/landing.png) | ![Home](./screenshots/home.png) | ![Profile](./screenshots/profile.png) | ![Post](./screenshots/post.png) |
 
 ---
 
@@ -199,8 +187,8 @@ After getting your Vercel URL, update `FRONTEND_URL` on Render to your Vercel UR
 ## 🔗 Related
 
 - **[Backend Repository →](https://github.com/YOUR_USERNAME/devsphere-backend)**
-- **[Live Demo →](https://devsphere.vercel.app)**
-- **[API Documentation →](https://devsphere-backend.onrender.com)**
+- **[Live Demo →](https://devsphere-frontend-six.vercel.app/)**
+- **[API Documentation →](https://devsphere-backend-7zjd.onrender.com)**
 
 ---
 
@@ -210,8 +198,6 @@ After getting your Vercel URL, update `FRONTEND_URL` on Render to your Vercel UR
 
 [![GitHub](https://img.shields.io/badge/GitHub-shishvishwakarma995--png-181717?style=flat&logo=github)](https://github.com/shishvishwakarma995-png)
 
-
-Built with ❤️ in 10 days | Full Stack Portfolio Project
 
 ⭐ Star this repo if you found it helpful!
 
