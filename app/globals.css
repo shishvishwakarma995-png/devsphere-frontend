@@ -1,26 +1,98 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Backgrounds */
+  --color-dark-bg:     #060D1A;
+  --color-dark-card:   #0A1628;
+  --color-dark-elev:   #0F1E38;
+  --color-dark-border: #1E3050;
+  --color-dark-nav:    #040C18;
+  --color-dark-side:   #050B15;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Accent colors */
+  --color-teal:        #2DD4BF;
+  --color-teal-dark:   #14B8A6;
+  --color-teal-light:  #5EEAD4;
+  --color-indigo:      #6366F1;
+  --color-indigo-soft: #818CF8;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Text */
+  --color-txt1:        #E2F0FF;
+  --color-txt2:        #5D7A9A;
+  --color-txt3:        #2D4A6A;
+
+  /* Light mode overrides */
+  --color-light-bg:     #F8FAFC;
+  --color-light-card:   #FFFFFF;
+  --color-light-border: #E2E8F0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #060D1A;
+  color: #E2F0FF;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.light body {
+  background-color: #F8FAFC;
+  color: #0F172A;
+}
+
+/* Page fade-in animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Apply to all main page content */
+main > div {
+  animation: fadeUp 0.3s ease forwards;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #1E3050;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: #2DD4BF40; }
+
+/* Selection color */
+::selection {
+  background: #2DD4BF30;
+  color: #2DD4BF;
+}
+
+/* Core Framework Theme Mappings Override */
+html.light, 
+html.light body, 
+html.light main, 
+html.light aside, 
+html.light nav,
+html.light .bg-dark-side,
+html.light .bg-dark-bg {
+  background-color: #f8fafc !important; /* Premium Crisp Clean Light Background */
+  color: #0f172a !important;            /* Premium Jet Black Text */
+}
+
+/* Specific text tokens replacement layout */
+html.light .text-txt1 { color: #0f172a !important; }
+html.light .text-txt2 { color: #475569 !important; }
+html.light .text-txt3 { color: #64748b !important; }
+
+/* Content Cards conversion */
+html.light .bg-dark-card {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .border-dark-border {
+  border-color: #e2e8f0 !important;
+}
+
+/* Seamless operational flow blend anim */
+body, main, aside, div, button, h1, h2, p, span {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease !important;
 }
