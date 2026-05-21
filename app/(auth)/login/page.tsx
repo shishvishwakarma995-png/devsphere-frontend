@@ -1,12 +1,11 @@
 "use client"
-import { useState, Suspense } from "react" 
+import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { login, register } from "@/lib/api"
 
-
-function LoginForm() {
+function LoginContent() {
   const router = useRouter()
   const params = useSearchParams()
   const [mode, setMode] = useState<'login'|'register'>('login')
@@ -77,7 +76,7 @@ function LoginForm() {
           display:'flex', background:'#060D1A',
           borderRadius:'10px', padding:'4px', marginBottom:'24px'
         }}>
-          { Rhine = (['login','register'] as const).map(m => (
+          {(['login','register'] as const).map(m => (
             <button key={m} onClick={() => {setMode(m);setError('');setSuccess('')}}
               style={{
                 flex:1, padding:'9px', borderRadius:'7px',
@@ -184,8 +183,8 @@ function LoginForm() {
 
         <p style={{fontSize:'12px', color:'#5D7A9A', textAlign:'center', marginTop:'16px'}}>
           {mode === 'login'
-            ? <>No account?{" "}<button onClick={()=>setMode('register')} style={{color:'#2DD4BF',background:'none',border:'none',cursor:'pointer',fontWeight:600}}>Create one free</button></></>
-            : <>Already have an account?{" "}<button onClick={()=>setMode('login')} style={{color:'#2DD4BF',background:'none',border:'none',cursor:'pointer',fontWeight:600}}>Sign in</button></></>
+            ? <>No account?{" "}<button onClick={()=>setMode('register')} style={{color:'#2DD4BF',background:'none',border:'none',cursor:'pointer',fontWeight:600}}>Create one free</button></>
+            : <>Already have an account?{" "}<button onClick={()=>setMode('login')} style={{color:'#2DD4BF',background:'none',border:'none',cursor:'pointer',fontWeight:600}}>Sign in</button></>
           }
         </p>
       </div>
@@ -203,24 +202,10 @@ function LoginForm() {
   )
 }
 
-
 export default function LoginPage() {
   return (
-    <Suspense fallback={
-      <div style={{
-        minHeight: '100vh',
-        background: '#060D1A',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#2DD4BF',
-        fontSize: '14px',
-        fontWeight: 600
-      }}>
-        Loading secure portal...
-      </div>
-    }>
-      <LoginForm />
+    <Suspense fallback={null}>
+      <LoginContent />
     </Suspense>
   )
 }
