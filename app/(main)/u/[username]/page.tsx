@@ -3,16 +3,44 @@ import { useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import useSWR from "swr"
-import { getUser } from "@/lib/api"
+import { getUser, getMe, followUser } from "@/lib/api"
+import { UserPlus, UserCheck } from "lucide-react"
 
 export default function ProfilePage() {
   const { username } = useParams()
   const [activeTab, setActiveTab] = useState<"posts" | "comments">("posts")
-  
+  const [following, setFollowing] = useState(false)
+  const [followLoading, setFollowLoading] = useState(false)
+  const [followerCount, setFollowerCount] = useState<number | null>(null)
+
+  const me = getMe()
+
   const { data: user, isLoading } = useSWR(
     username ? `user-${username}` : null,
-    () => getUser(username as string)
+    () => getUser(username as string),
+    {
+      onSuccess: (data) => {
+        setFollowerCount(data._count?.followers ?? 0)
+        if (data.isFollowing !== undefined) setFollowing(data.isFollowing)
+      }
+    }
   )
+
+  const isOwnProfile = me?.username === username
+
+  const handleFollow = async () => {
+    if (!me) { window.location.href = '/login'; return }
+    setFollowLoading(true)
+    try {
+      await followUser(username as string)
+      setFollowing(f => !f)
+      setFollowerCount(c => (c ?? 0) + (following ? -1 : 1))
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setFollowLoading(false)
+    }
+  }
 
   if (isLoading) return (
     <div className="flex justify-center py-20 text-txt2 animate-pulse">Loading DevSphere Profile...</div>
@@ -62,7 +90,9 @@ export default function ProfilePage() {
               Posts
             </div>
             <div>
-              <span className="block font-bold text-txt1 text-sm">{user._count?.followers ?? 0}</span>
+              <span className="block font-bold text-txt1 text-sm">
+                {followerCount ?? user._count?.followers ?? 0}
+              </span>
               Followers
             </div>
             <div>
@@ -71,13 +101,33 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Action Button (Go to settings) */}
-          <Link href={`/u/${user.username}/settings`} className="block w-full mt-4 text-center text-xs font-semibold bg-dark-border text-txt1 hover:bg-dark-border/80 px-4 py-2.5 rounded-lg transition-colors">
-            Edit Profile & Settings
-          </Link>
+          {/* Follow / Edit Button */}
+          {isOwnProfile ? (
+            <Link
+              href={`/u/${user.username}/settings`}
+              className="block w-full mt-4 text-center text-xs font-semibold bg-dark-border text-txt1 hover:bg-dark-border/80 px-4 py-2.5 rounded-lg transition-colors"
+            >
+              Edit Profile & Settings
+            </Link>
+          ) : (
+            <button
+              onClick={handleFollow}
+              disabled={followLoading}
+              className={`w-full mt-4 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold transition-all ${
+                following
+                  ? "bg-dark-border text-txt2 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30 border border-dark-border"
+                  : "bg-teal text-dark-bg hover:bg-teal-dark shadow-lg shadow-teal/20"
+              } disabled:opacity-60 disabled:cursor-not-allowed`}
+            >
+              {following
+                ? <><UserCheck size={13} /> Following</>
+                : <><UserPlus size={13} /> Follow</>
+              }
+            </button>
+          )}
         </div>
         
-        {/* Tech Stack Widget (LinkedIn Style Idea) */}
+        {/* Tech Stack Widget */}
         <div className="bg-dark-card border border-dark-border rounded-xl p-5">
           <h3 className="text-sm font-bold text-txt1 mb-3">Verified Skills</h3>
           <div className="flex flex-wrap gap-1.5">
@@ -92,7 +142,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* RIGHT COLUMN: Interactive Tabs for Activity History */}
+      {/* RIGHT COLUMN: Interactive Tabs */}
       <div className="md:col-span-2 space-y-4">
         {/* Tab Controls */}
         <div className="flex border-b border-dark-border bg-dark-card rounded-t-xl p-1">
@@ -118,7 +168,7 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        {/* Tab Content Display */}
+        {/* Tab Content */}
         <div className="space-y-3">
           {activeTab === "posts" ? (
             user.posts && user.posts.length > 0 ? (
