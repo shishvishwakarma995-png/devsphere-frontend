@@ -96,3 +96,106 @@ html.light .border-dark-border {
 body, main, aside, div, button, h1, h2, p, span {
   transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease !important;
 }
+
+
+html.light nav,
+html.light .bg-dark-nav,
+html.light header {
+  background-color: #040C18 !important;
+  border-color: #1E3050 !important;
+}
+
+
+html.light aside,
+html.light .bg-dark-side {
+  background-color: #050B15 !important;
+  border-color: #1E3050 !important;
+}
+
+
+html.light aside .text-txt2,
+html.light aside a {
+  color: #5D7A9A !important;
+}
+html.light aside a:hover,
+html.light aside .text-teal {
+  color: #2DD4BF !important;
+}
+html.light aside .text-txt3 {
+  color: #2D4A6A !important;
+}
+
+
+html.light main,
+html.light .bg-dark-bg {
+  background-color: #F8FAFC !important;
+}
+
+
+html.light .bg-dark-card {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+}
+
+
+html.light .bg-dark-elev {
+  background-color: #F1F5F9 !important;
+  border-color: #CBD5E1 !important;
+}
+
+
+html.light .border-dark-border {
+  border-color: #E2E8F0 !important;
+}
+
+
+html.light .text-txt1 { color: #0F172A !important; }
+html.light .text-txt2 { color: #475569 !important; }
+html.light .text-txt3 { color: #64748B !important; }
+
+
+html.light input,
+html.light textarea {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  color: #0F172A !important;
+}
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+
+html.light .bg-dark-border {
+  background-color: #E2E8F0 !important;
+  color: #0F172A !important;
+}
+html.light .bg-dark-border:hover {
+  background-color: #CBD5E1 !important;
+}
+
+
+html.light .bg-dark-border.text-txt2 {
+  background-color: #F1F5F9 !important;
+  color: #475569 !important;
+  border-color: #E2E8F0 !important;
+}
+
+
+html.light .hover\:border-dark-border\/80:hover {
+  border-color: #CBD5E1 !important;
+}
+
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #2DD4BF40;
+}
+
+
+html.light ::selection {
+  background: #2DD4BF30;
+  color: #0D9488;
+}
