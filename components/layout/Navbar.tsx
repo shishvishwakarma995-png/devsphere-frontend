@@ -1,15 +1,16 @@
 "use client"
 import Link from "next/link"
-import { Search, Plus } from "lucide-react"
-import { useEffect, useState } from "react"
+import { Plus, LogOut, User, Settings } from "lucide-react"
+import { useEffect, useState, useRef } from "react"
 import ThemeToggle from "@/components/ThemeToggle"
 import { logout, getMe } from "@/lib/api"
 import SearchBar from "@/components/SearchBar"
 
 export default function Navbar() {
   const [user, setUser] = useState<any>(null)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
- 
   useEffect(() => {
     const checkUser = () => {
       try {
@@ -29,6 +30,17 @@ export default function Navbar() {
     checkUser()
     window.addEventListener('storage', checkUser)
     return () => window.removeEventListener('storage', checkUser)
+  }, [])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   return (
@@ -60,17 +72,68 @@ export default function Navbar() {
         {/* Theme toggle */}
         <ThemeToggle />
 
-        {/* Avatar → goes to profile, click name to logout */}
+        {/* Avatar with dropdown */}
         {user ? (
-          <div className="flex items-center gap-1">
-            <Link href={`/u/${user.username}`}
-              title={`View profile — @${user.username}`}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setDropdownOpen(o => !o)}
+              title={`@${user.username}`}
               className="w-9 h-9 rounded-full bg-indigo text-white
                          text-sm font-bold flex items-center justify-center
                          hover:bg-indigo-soft transition-colors shrink-0
                          border-2 border-indigo/50 hover:border-indigo">
               {user.username?.[0]?.toUpperCase() ?? 'U'}
-            </Link>
+            </button>
+
+            {/* Dropdown Menu */}
+            {dropdownOpen && (
+              <div className="absolute right-0 top-11 w-48
+                              bg-dark-card border border-dark-border
+                              rounded-xl shadow-xl z-50 overflow-hidden
+                              animate-in fade-in slide-in-from-top-2">
+
+                {/* User info */}
+                <div className="px-4 py-3 border-b border-dark-border">
+                  <p className="text-xs font-bold text-txt1">@{user.username}</p>
+                  {user.email && <p className="text-xs text-txt2 truncate">{user.email}</p>}
+                </div>
+
+                {/* Links */}
+                <div className="py-1">
+                  <Link
+                    href={`/u/${user.username}`}
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-2.5
+                               text-sm text-txt2 hover:text-txt1
+                               hover:bg-dark-border transition-colors">
+                    <User size={14} />
+                    View Profile
+                  </Link>
+
+                  <Link
+                    href={`/u/${user.username}/settings`}
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-2.5
+                               text-sm text-txt2 hover:text-txt1
+                               hover:bg-dark-border transition-colors">
+                    <Settings size={14} />
+                    Settings
+                  </Link>
+                </div>
+
+                {/* Logout */}
+                <div className="border-t border-dark-border py-1">
+                  <button
+                    onClick={() => { setDropdownOpen(false); logout() }}
+                    className="flex items-center gap-2.5 px-4 py-2.5 w-full
+                               text-sm text-red-400 hover:text-red-300
+                               hover:bg-red-500/10 transition-colors">
+                    <LogOut size={14} />
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <Link href="/login"
